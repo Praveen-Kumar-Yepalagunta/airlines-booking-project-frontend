@@ -1,0 +1,53 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <h2 class="text-center text-white">Booked Flights</h2>
+      <div class="backButton">
+        <button class="btn bg-white text-primary" routerLink="/flights">
+          Go Back
+        </button>
+      </div>
+
+      <table>
+        <caption>
+          Statement Summary
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col" class="bg-primary text-white">First Name</th>
+            <th scope="col" class="bg-primary text-white">Last Name</th>
+            <th scope="col" class="bg-primary text-white">Email</th>
+
+            <th scope="col" class="bg-primary text-white">Flight Number</th>
+            <th scope="col" class="bg-primary text-white">Departure</th>
+            <th scope="col" class="bg-primary text-white">Arrival</th>
+            <th scope="col" class="bg-primary text-white">
+              Departure Date & Time
+            </th>
+
+            <th scope="col" class="bg-primary text-white">Seats Booked</th>
+            <th scope="col" class="bg-primary text-white">Total Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let booking of bookings">
+            <td data-label="First Name">{{ booking.user.firstName }}</td>
+            <td data-label="Last Name">{{ booking.user.lastName }}</td>
+            <td data-label="Email">{{ booking.user.email }}</td>
+
+            <td data-label="Flight Number">
+              {{ booking.flight.flightNumber }}
+            </td>
+            <td data-label="Departure">{{ booking.flight.departure }}</td>
+            <td data-label="Arrival">{{ booking.flight.arrival }}</td>
+            <td data-label="Departure Date & Time">
+              {{ booking.flight.departureDateTime }}
+            </td>
+            <td data-label="Seats Booked">{{ booking.seatsBooked }}</td>
+            <td data-label="Total Price">{{ booking.totalPrice }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

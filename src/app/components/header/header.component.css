@@ -1,0 +1,11 @@
+.header-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-container {
+  position: fixed;
+  top: 50px; /* Adjust as needed to position the card below the header */
+  right: 10px; /* Adjust as needed to position the card on the right side */
+  z-index: 1000; /* Ensure the card is above other content */
+}

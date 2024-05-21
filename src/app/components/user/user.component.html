@@ -1,0 +1,63 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <h2 class="text-center text-white">User Details</h2>
+      <div class="backButton">
+        <button class="btn bg-white text-primary" routerLink="/flights">
+          Go Back
+        </button>
+      </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="bg-primary text-white">First Name</th>
+            <th scope="col" class="bg-primary text-white">Last Name</th>
+            <th scope="col" class="bg-primary text-white">Email</th>
+            <th scope="col" class="bg-primary text-white">Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="!editingUser; else editUserForm">
+            <!-- Display user details -->
+            <tr>
+              <td *ngIf="users" data-label="First Name">
+                {{ users.firstName }}
+              </td>
+              <td *ngIf="users" data-label="Last Name">
+                {{ users.lastName }}
+              </td>
+              <td *ngIf="users" data-label="Email">{{ users.email }}</td>
+              <td>
+                <button class="btn btn-primary" (click)="toggleEditingUser()">
+                  Update
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #editUserForm>
+            <!-- Edit user form -->
+            <tr>
+              <td data-label="First Name">
+                <input type="text" [(ngModel)]="users.firstName" />
+              </td>
+              <td data-label="Last Name">
+                <input type="text" [(ngModel)]="users.lastName" />
+              </td>
+              <td data-label="Email">
+                <input type="text" [(ngModel)]="users.email" />
+              </td>
+              <td>
+                <button class="btn btn-primary" (click)="onUpdateUser()">
+                  Confirm Update
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+      <h6 class="text-center pt-3 text-white">
+        Note: You will be logged out on Email update.
+      </h6>
+    </div>
+  </div>
+</div>

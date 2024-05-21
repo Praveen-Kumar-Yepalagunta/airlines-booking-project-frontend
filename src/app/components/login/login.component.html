@@ -1,0 +1,76 @@
+<div class="container mt-5">
+  <div class="row justify-content-center card-container">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white text-center">Login</div>
+        <div class="card-body login-card">
+          <p class="text-danger text-center fw-bold">{{ loginMessage }}</p>
+          <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+            <div class="form-group mb-3">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                [(ngModel)]="email"
+                required
+                email
+                #emailInput="ngModel"
+                [pattern]="emailPattern"
+              />
+              <div
+                *ngIf="
+                  emailInput.invalid &&
+                  (emailInput.touched || loginForm.submitted)
+                "
+                class="text-danger"
+              >
+                <div
+                  *ngIf="emailInput.errors?.['required']"
+                  class="text-center"
+                >
+                  Email is required.
+                </div>
+                <div *ngIf="emailInput.errors?.['pattern']">
+                  Please enter a valid email address format.
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                [(ngModel)]="password"
+                required
+                password
+                #passwordInput="ngModel"
+              />
+              <div
+                *ngIf="
+                  passwordInput.invalid &&
+                  (passwordInput.touched || loginForm.submitted)
+                "
+                class="text-danger"
+              >
+                <div
+                  *ngIf="passwordInput.errors?.['required']"
+                  class="text-center"
+                >
+                  Password is required.
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

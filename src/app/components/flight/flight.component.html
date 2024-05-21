@@ -1,0 +1,256 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col">
+      <h2 class="text-center text-white" *ngIf="!isAdminEndPoint">
+        Available Flights
+      </h2>
+      <h2 class="text-center text-white" *ngIf="isAdminEndPoint">
+        Add Flights
+      </h2>
+
+      <!-- Search Form -->
+      <form (ngSubmit)="onSearch()" *ngIf="!isAdminEndPoint">
+        <div
+          class="form-row filter-form bg-primary p-2 mb-5 search-bar-container search-bar"
+        >
+          <div
+            class="form-group filter-form search-input placeholder-card mb-1"
+          >
+            <label for="departure"> </label>
+
+            <input
+              placeholder="Departure"
+              type="text"
+              class="form-control"
+              id="departure"
+              name="departure"
+              [(ngModel)]="searchParams.departure"
+              (ngModelChange)="onDepartureChange($event)"
+            />
+          </div>
+          <div class="form-group filter-form search-input mb-1">
+            <label for="arrival"> </label>
+            <input
+              placeholder="Arrival"
+              type="text"
+              class="form-control"
+              id="arrival"
+              name="arrival"
+              [(ngModel)]="searchParams.arrival"
+              (ngModelChange)="onArrivalChange($event)"
+            />
+          </div>
+          <div class="form-group filter-form search-input mb-1">
+            <label for="departureDateTime"></label>
+            <input
+              placeholder="Departure Date & Time"
+              class="form-control"
+              id="departureDateTime"
+              name="departureDateTime"
+              type="datetime-local"
+              [(ngModel)]="searchParams.departureDateTime"
+            />
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn bg-white search-input">
+              Search
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Available Flights List -->
+      <form *ngIf="!isAdminEndPoint">
+        <table class="table table-container">
+          <thead>
+            <tr>
+              <th scope="col" class="bg-primary text-white text-size">
+                Departure
+              </th>
+              <th scope="col" class="bg-primary text-white">Arrival</th>
+              <th scope="col" class="bg-primary text-white">
+                Departure Date & Time
+              </th>
+              <th scope="col" class="bg-primary text-white">Seats Available</th>
+              <th scope="col" class="bg-primary text-white">Ticket Price</th>
+              <th
+                scope="col"
+                class="bg-primary text-white"
+                *ngIf="isUserLoggedIn"
+              >
+                Enter Total Seats Required
+              </th>
+              <th
+                scope="col"
+                class="bg-primary text-white"
+                *ngIf="isUserLoggedIn"
+              >
+                Total Price
+              </th>
+              <th scope="col" class="bg-primary text-white">Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let flight of flights; let i = index">
+              <td data-label="Departure">{{ flight.departure }}</td>
+              <td data-label="Arrival">{{ flight.arrival }}</td>
+              <td data-label="Departure Date & Time">
+                {{ flight.departureDateTime }}
+              </td>
+              <td data-label="Seats Available">{{ flight.seatsAvailable }}</td>
+              <td data-label="Ticket Price">{{ flight.ticketPrice }}</td>
+              <td *ngIf="isUserLoggedIn" data-label="Seats Required">
+                <input
+                  type="number"
+                  id="seatsBooked"
+                  name="seatsBooked"
+                  [(ngModel)]="seatsBookedList[i]"
+                  placeholder="Seats Required"
+                  #seatsBookedInput="ngModel"
+                  #seatsBooked
+                  style="width: 100%; box-sizing: border-box"
+                />
+
+                <div
+                  *ngIf="
+                    seatsBookedList[i] < 1 ||
+                    seatsBookedList[i] > flight.seatsAvailable
+                  "
+                  class="text-danger"
+                >
+                  Please enter a valid number of seats (1 -
+                  {{ flight.seatsAvailable }})
+                </div>
+              </td>
+
+              <td *ngIf="isUserLoggedIn" data-label="Total Price" type="number">
+                {{ flight.ticketPrice * seatsBookedList[i] || 0 }}
+              </td>
+
+              <td *ngIf="!isUserLoggedIn">
+                <button
+                  class="btn btn-primary text-white"
+                  (click)="OnBookNowClick()"
+                >
+                  Book Now
+                </button>
+              </td>
+              <td *ngIf="isUserLoggedIn">
+                <button
+                  class="btn btn-primary text-white"
+                  (click)="
+                    onConfirmBookingClick(flight.flightId, seatsBookedList[i])
+                  "
+                  (click)="saveSeats(flight.flightId, seatsBookedList[i])"
+                  [disabled]="
+                    seatsBookedList[i] < 1 ||
+                    seatsBookedList[i] > flight.seatsAvailable
+                  "
+                >
+                  Book Now
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+
+      <!-- add table with FORM MODEL -->
+      <form
+        #myForm="ngForm"
+        (ngSubmit)="onSubmit(myForm)"
+        novalidate
+        (submit)="createFlight()"
+        *ngIf="isAdminEndPoint"
+        class="form-holder justify-content-center"
+        onsubmit="return validateForm()
+        "
+      >
+        <div class="bg-primary p-2 mb-5 add-flight-container">
+          <div class="form-group mb-3 text-white">
+            <label for="flightNumber">Flight Number:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="flightNumber"
+              name="flightNumber"
+              ngModel
+              required
+              [(ngModel)]="flightNumber"
+            />
+          </div>
+          <div class="form-group mb-3 text-white">
+            <label for="departure">Departure:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="departure"
+              name="departure"
+              ngModel
+              required
+              [(ngModel)]="departure"
+            />
+          </div>
+          <div class="form-group mb-3 text-white">
+            <label for="arrival">Arrival:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="arrival"
+              name="arrival"
+              ngModel
+              required
+              [(ngModel)]="arrival"
+            />
+          </div>
+          <div class="form-group mb-3 text-white">
+            <label for="departureDateTime">Departure Date & Time:</label>
+            <input
+              class="form-control"
+              type="datetime-local"
+              id="departureDateTime"
+              name="departureDateTime"
+              ngModel
+              required
+              [(ngModel)]="departureDateTime"
+            />
+          </div>
+          <div class="form-group mb-3 text-white">
+            <label for="ticketPrice">Ticket Price</label>
+            <input
+              class="form-control"
+              type="number"
+              id="ticketPrice"
+              name="ticketPrice"
+              ngModel
+              required
+              [(ngModel)]="ticketPrice"
+            />
+          </div>
+          <div class="form-group mb-3 text-white">
+            <label for="seatsAvailable">Seats Available:</label>
+            <input
+              class="form-control"
+              type="text"
+              id="seatsAvailable"
+              name="seatsAvailable"
+              ngModel
+              required
+              [(ngModel)]="seatsAvailable"
+            />
+          </div>
+          <div class="text-center">
+            <button
+              type="submit"
+              class="btn btn-white bg-white text-black"
+              type="submit"
+              [disabled]="!myForm.form.valid"
+            >
+              Add Flight
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

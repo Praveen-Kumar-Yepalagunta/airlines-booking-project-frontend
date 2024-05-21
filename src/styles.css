@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  /* background-image: url('https://wallpaperset.com/w/full/3/1/4/183275.jpg'); */
+  background-image: url("https://wallpaperset.com/w/full/8/f/2/183428.jpg");
+  /* background-image: src('assets/bacgroundImg.png'); */
+  background-size: cover;
+  background-repeat: none;
+  background-attachment: fixed;
+
+  overflow: hidden;
+  overflow-y: scroll;
+  background-position: center;
+}

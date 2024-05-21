@@ -1,0 +1,166 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">Registration</div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit()" #registrationForm="ngForm">
+            <div class="mb-3">
+              <label for="firstName" class="form-label">First Name:</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                [(ngModel)]="firstName"
+                class="form-control"
+                required
+                #firstNameInput="ngModel"
+              />
+              <div
+                *ngIf="
+                  firstNameInput.invalid &&
+                  (firstNameInput.touched || registrationForm.submitted)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="firstNameInput.errors?.['required']">
+                  First Name is required.
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="lastName" class="form-label">Last Name:</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                [(ngModel)]="lastName"
+                class="form-control"
+                required
+                #lastNameInput="ngModel"
+              />
+              <div
+                *ngIf="
+                  lastNameInput.invalid &&
+                  (lastNameInput.touched || registrationForm.submitted)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="lastNameInput.errors?.['required']">
+                  Last Name is required.
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password:</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                [(ngModel)]="password"
+                class="form-control"
+                (input)="checkPassword()"
+                required
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                #passwordInput="ngModel"
+              />
+              <div
+                *ngIf="
+                  passwordInput.invalid &&
+                  (passwordInput.touched || registrationForm.submitted)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="passwordInput.errors?.['required']">
+                  Password is required.
+                </div>
+                <div
+                  *ngIf="passwordInput.errors?.['pattern'] && (passwordInput.touched || registrationForm.submitted)"
+                >
+                  Password must contain at least 8 characters, including one
+                  uppercase letter, one lowercase letter, one number, and one
+                  special character.
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label"
+                >Confirm Password:</label
+              >
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                [(ngModel)]="confirmPassword"
+                class="form-control"
+                required
+                #confirmPasswordInput="ngModel"
+                (input)="confirmPasswordValue()"
+              />
+              <div
+                *ngIf="
+                  confirmPasswordInput.invalid &&
+                  (confirmPasswordInput.touched || registrationForm.submitted)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="confirmPasswordInput.errors?.['required']">
+                  Please confirm your password.
+                </div>
+              </div>
+            </div>
+            <div
+              *ngIf="
+                !isConfirmPasswordEqual &&
+                (confirmPasswordInput.touched || registrationForm.submitted)
+              "
+              class="text-danger"
+            >
+              Passwords do not match.
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                [(ngModel)]="email"
+                required
+                email
+                #emailInput="ngModel"
+                [pattern]="emailPattern"
+              />
+              <div
+                *ngIf="
+                  emailInput.invalid &&
+                  (emailInput.touched || registrationForm.submitted)
+                "
+                class="text-danger"
+              >
+                <div *ngIf="emailInput.errors?.['required']">
+                  Email is required.
+                </div>
+                <div *ngIf="emailInput.errors?.['pattern']">
+                  Please enter a valid email address format.
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="
+                !registrationForm.valid || password !== confirmPassword
+              "
+            >
+              Register
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
